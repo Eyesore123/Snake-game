@@ -3,7 +3,6 @@ import random
 import sys
 from enum import Enum
 import math
-from datetime import datetime
 
 # Initialize Pygame
 pygame.init()
@@ -119,7 +118,7 @@ class SnakeGame:
         self.portals = []
         self.particles = []
         self.active_power_ups = {}
-        self.game_speed = 10
+        self.game_speed = 5
         self.time_left = 60 * 30
         
         # Initialize game
@@ -246,10 +245,6 @@ class SnakeGame:
             # Create a gradient effect from dark teal to light teal
             color = (0, int(255 * (y / WINDOW_SIZE)), 128)  # Teal gradient
             pygame.draw.line(self.screen, color, (0, y), (WINDOW_SIZE, y))
-        
-        # Add a subtle pattern (optional)
-        for x in range(0, WINDOW_SIZE, 20):
-            pygame.draw.line(self.screen, (255, 255, 255, 50), (x, 0), (x, WINDOW_SIZE), 1)
 
         # Calculate center positions
         center_x = WINDOW_SIZE // 2
@@ -262,8 +257,9 @@ class SnakeGame:
         self.screen.blit(title_surface, title_rect)
         
         # Draw mode options
-        menu_font = pygame.font.Font(None, 48)
-        spacing = 60
+        menu_font = pygame.font.SysFont("Arial", 35)
+        margin = 5
+        spacing = 60 + margin
         
         for i, mode in enumerate(GameMode):
             text_color = WHITE  # Keep text color white for contrast
@@ -285,13 +281,14 @@ class SnakeGame:
                 # Draw selection indicator (arrow)
                 arrow = "→ "
                 arrow_surface = menu_font.render(arrow, True, WHITE)
-                arrow_rect = arrow_surface.get_rect(right=text_rect.left - 10, centery=text_rect.centery)
+                arrow_rect = arrow_surface.get_rect(right=text_rect.left - 15, centery=text_rect.centery)
                 self.screen.blit(arrow_surface, arrow_rect)
             
             # Draw button background if needed
             if bg_color:
                 bg_rect = text_rect.inflate(padding * 2, padding)
                 pygame.draw.rect(self.screen, bg_color, bg_rect, border_radius=10)
+                # Fill the rectangle with white
             
             self.screen.blit(text_surface, text_rect)
         
@@ -317,7 +314,7 @@ class SnakeGame:
             self.active_power_ups[PowerUpType.DOUBLE_POINTS] = 300
         elif power_up.type == PowerUpType.SLOW_TIME:
             self.active_power_ups[PowerUpType.SLOW_TIME] = 300
-            self.game_speed = 5
+            self.game_speed = 4
 
     def update_power_ups(self):
         for power_up_type in list(self.active_power_ups.keys()):
